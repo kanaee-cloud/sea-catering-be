@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Users {
+  id           Int            @id @default(autoincrement())
+  username     String         @db.Char(30)
+  email        String         @unique
+  role         Role           @default(USER)
+  password     String
+  RefreshToken RefreshToken[]
+  Subscription Subscription[]
+}
+
+enum PlanType {
+  DIET
+  PROTEIN
+  ROYALE
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model Subscription {
+  id            String            @id @default(uuid()) 
+  userId        Int
+  user          Users             @relation(fields: [userId], references: [id])
+  planType      PlanType
+  mealTypes     String
+  deliveryDays  String
+  allergies     String?           @db.Text
+  totalPrice    Decimal           @default(0.00) @db.Decimal(10, 2)
+  startDate     DateTime          @default(now())
+  endDate       DateTime?
+  status        String            @default("pending")
+  mealSchedules MealSchedule[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+}
+
+model Menu {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String?        @db.Text
+  price         Decimal        @db.Decimal(10, 2)
+  calories      Int
+  proteinGrams  Decimal        @db.Decimal(5, 2)
+  carbGrams     Decimal        @db.Decimal(5, 2)
+  fatGrams      Decimal        @db.Decimal(5, 2)
+  imageUrl      String?        
+  mealSchedules MealSchedule[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model MealSchedule {
+  id            String      @id @default(uuid())
+  subscriptionId String     
+  subscription  Subscription @relation(fields: [subscriptionId], references: [id])
+  deliveryDate  DateTime    
+  mealType      MealType    
+  menuId        String      
+  menu          Menu        @relation(fields: [menuId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  @@unique([subscriptionId, deliveryDate, mealType]) 
+}
+
+model RefreshToken {
+  id          String    @id @default(uuid()) 
+  token       String    @unique
+  userId      Int
+  user        Users     @relation(fields: [userId], references: [id])
+  createdAt   DateTime  @default(now())
+  expiredAt   DateTime
+}
+
+model Testimonial {
+  id            String    @id @default(uuid()) 
+  customerName  String    @map("customer_name") @db.Char(50) 
+  reviewMessage String    @map("review_message") @db.Text 
+  rating        Int      
+  createdAt     DateTime  @default(now())
+}
