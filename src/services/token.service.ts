@@ -1,8 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { generateRefreshToken, verifyRefreshToken } from "../utils/auth.utils";
 import { createError } from "../exceptions/error.exception";
-import { ref } from "joi";
-// import { create } from "domain";
+
 
 const prisma = new PrismaClient()
 

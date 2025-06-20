@@ -1,11 +1,11 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { registerUserSchema, loginUserSchema } from "../dtos/user.dtos";
-import {createUser, getUser} from "../services/user.service";
-import {comparePassword, generateAccessToken, generateRefreshToken, verifyRefreshToken} from "../utils/auth.utils";
-import {asyncHandler} from "../exceptions/async_handler.exception";
+import { createUser, getUser } from "../services/user.service";
+import { comparePassword, generateAccessToken, verifyRefreshToken } from "../utils/auth.utils";
+import { asyncHandler } from "../exceptions/async_handler.exception";
 import { logger } from "../utils/logging.utils";
-import {createError} from "../exceptions/error.exception";
-import { createRefreshToken, deleteToken, getToken } from '../services/token.service';
+import { createError } from "../exceptions/error.exception";
+import { createRefreshToken, deleteToken } from '../services/token.service';
 
 
 export const registerController = asyncHandler(async (req: Request, res: Response) => {

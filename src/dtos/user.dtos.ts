@@ -1,4 +1,4 @@
-import joi, { ObjectSchema} from "joi";
+import joi, { ObjectSchema } from "joi";
 
 export const registerUserSchema: ObjectSchema = joi.object().keys({
     username: joi.string().min(3).max(30).required(),

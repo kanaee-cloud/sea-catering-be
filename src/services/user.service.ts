@@ -1,8 +1,8 @@
-import {PrismaClient, Users} from "@prisma/client";
+import { PrismaClient, Users } from "@prisma/client";
 import { hashPassword } from "../utils/auth.utils";
 import { createError } from "../exceptions/error.exception";
-import {logger} from "../utils/logging.utils";
-import {comparePassword} from "../utils/auth.utils";
+import { logger } from "../utils/logging.utils";
+
 
 const prisma = new PrismaClient();
 
