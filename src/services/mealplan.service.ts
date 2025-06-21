@@ -16,6 +16,15 @@ export const createMealplan = async (data: CreateMealplanDto) => {
   }
 };
 
+export const getMealplanById = async (id: string) => {
+  try {
+    return await prisma.mealplan.findUnique({ where: { id } });
+  } catch (error) {
+    logger.error(`Failed to fetch mealplan with id: ${id}`, error);
+    throw createError('fail', `Failed to fetch mealplan with id: ${id}`, 404);
+  }
+};
+
 export const getAllMealplans = async () => {
   try {
     return await prisma.mealplan.findMany({ orderBy: { name: 'asc' } });

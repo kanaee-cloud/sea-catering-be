@@ -34,6 +34,12 @@ enum PlanType {
   ROYALE
 }
 
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
 enum MealType {
   BREAKFAST
   LUNCH
@@ -50,21 +56,23 @@ enum DayOfWeek {
   SUNDAY
 }
 
-
 model Subscription {
-  id           String   @id @default(uuid())
+  id           String             @id @default(uuid())
   userId       Int
-  user         Users    @relation(fields: [userId], references: [id])
-  name         String   @db.Char(50)
-  phoneNumber  String   @db.VarChar(20)
+  user         Users              @relation(fields: [userId], references: [id])
+  name         String             @db.Char(50)
+  phoneNumber  String             @db.VarChar(20)
   planType     PlanType
   mealTypes    String
   deliveryDays String
-  allergies    String?  @db.Text
+  allergies    String?            @db.Text
   totalPrice   Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
+  status       SubscriptionStatus @default(ACTIVE)
+  pauseStart   DateTime?
+  pauseEnd     DateTime?
+  cancelledAt  DateTime?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 }
 
 model Mealplan {

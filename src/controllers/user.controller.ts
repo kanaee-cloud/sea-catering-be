@@ -6,6 +6,7 @@ import { asyncHandler } from "../exceptions/async_handler.exception";
 import { logger } from "../utils/logging.utils";
 import { createError } from "../exceptions/error.exception";
 import { createRefreshToken, deleteToken } from '../services/token.service';
+import { getUserSubscription } from '../services/subscription.service';
 
 
 export const registerController = asyncHandler(async (req: Request, res: Response) => {
@@ -70,6 +71,8 @@ export const loginController = asyncHandler(async (req: Request, res: Response) 
     return
 })
 
+
+
 export const getUserController = asyncHandler(async (req: Request, res: Response) => {
     const token = verifyRefreshToken(req.cookies.refreshToken)
 
@@ -79,6 +82,7 @@ export const getUserController = asyncHandler(async (req: Request, res: Response
     }
 
     const user = await getUser({ id: token.userId });
+    const subscription = await getUserSubscription(token.userId);
 
     res.status(200).json({
         status: "success",
@@ -87,7 +91,8 @@ export const getUserController = asyncHandler(async (req: Request, res: Response
             user: {
                 email: user.email,
                 username: user.username,
-                role: user.role
+                role: user.role,
+                subscription
             }
         }
     });
