@@ -95,6 +95,52 @@ export const getDashboardStats = async ({ startDate, endDate }: DateFilter) => {
   };
 }
 
+export const pauseSubscriptionByAdmin = async (
+  subscriptionId: string,
+  pauseStart?: Date,
+  pauseEnd?: Date
+) => {
+  const subscription = await prisma.subscription.findUnique({
+    where: { id: subscriptionId },
+  });
+
+  if (!subscription) {
+    throw createError("fail", "Subscription not found", 404);
+  }
+
+  if (!pauseStart) {
+    throw createError("fail", "Pause start date is required", 400);
+  }
+
+  return await prisma.subscription.update({
+    where: { id: subscription.id },
+    data: {
+      status: "PAUSED",
+      pauseStart,
+      pauseEnd: pauseEnd ?? null,
+    },
+  });
+};
+
+export const cancelSubscriptionByAdmin = async (subscriptionId: string) => {
+  const subscription = await prisma.subscription.findUnique({
+    where: { id: subscriptionId },
+  });
+
+  if (!subscription) {
+    throw createError("fail", "Subscription not found", 404);
+  }
+
+  return await prisma.subscription.update({
+    where: { id: subscription.id },
+    data: {
+      status: "CANCELLED",
+      cancelledAt: new Date(),
+    },
+  });
+};
+
+
 export const logoutAdmin = async (token: string) => {
     await deleteToken(token);
 

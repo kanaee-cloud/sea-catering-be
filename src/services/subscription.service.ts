@@ -172,3 +172,34 @@ export const cancelUserSubscription = async (userId: number) => {
     },
   });
 };
+
+export const resumeSubscription = async (subscriptionId: string) => {
+  const subscription = await prisma.subscription.findUnique({
+    where: { id: subscriptionId },
+  });
+
+  if (!subscription) {
+    throw createError("fail", "Subscription not found", 404);
+  }
+
+  if (
+    subscription.status !== "PAUSED" &&
+    subscription.status !== "CANCELLED"
+  ) {
+    throw createError("fail", "Subscription is not paused or cancelled", 400);
+  }
+
+  const updated = await prisma.subscription.update({
+    where: { id: subscription.id },
+    data: {
+      status: "ACTIVE",
+      pauseStart: null,
+      pauseEnd: null,
+      resumeAt: new Date(),
+    },
+  });
+
+  logger.info("Subscription resumed by admin", { subscriptionId });
+
+  return updated;
+};

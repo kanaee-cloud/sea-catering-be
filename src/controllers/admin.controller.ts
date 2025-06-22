@@ -4,29 +4,28 @@ import {
   logoutAdmin,
   getAdmin,
   getDashboardStats,
+  cancelSubscriptionByAdmin,
+  pauseSubscriptionByAdmin,
 } from "../services/admin.service";
 import { asyncHandler } from "../exceptions/async_handler.exception";
 import { createError } from "../exceptions/error.exception";
 import {
   comparePassword,
   generateAccessToken,
+  getUserInfoFromJWT,
   verifyRefreshToken,
 } from "../utils/auth.utils";
 import { loginAdminSchema, registerAdminSchema } from "../dtos/admin.dtos";
 import { createRefreshToken } from "../services/token.service";
+import { getAllUsers } from "../services/user.service";
 
 export const registerAdminController = asyncHandler(
   async (req: Request, res: Response) => {
-     const registerData = await registerAdminSchema.validateAsync(req.body);
-    
-            const {
-                username,
-                email,
-                password
-            } = registerData;
-    
-            const admins = await createAdmin(username, email, password);
-    
+    const registerData = await registerAdminSchema.validateAsync(req.body);
+
+    const { username, email, password } = registerData;
+
+    const admins = await createAdmin(username, email, password);
 
     res.status(201).json({
       status: "success",
@@ -73,6 +72,19 @@ export const loginAdminController = asyncHandler(
   }
 );
 
+export const getAllUsersController = asyncHandler(
+  async (_req: Request, res: Response) => {
+    const users = await getAllUsers();
+    res.status(200).json({
+      status: "success",
+      message: "Fetched all users",
+      data: users,
+    });
+
+    return;
+  }
+);
+
 export const getAdminController = asyncHandler(
   async (req: Request, res: Response) => {
     const token = verifyRefreshToken(req.cookies.refreshToken);
@@ -100,20 +112,70 @@ export const getAdminController = asyncHandler(
   }
 );
 
-export const getAdminDashboard = asyncHandler(async (req: Request, res: Response) => {
-  const { startDate, endDate } = req.query;
+export const getAdminDashboard = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { startDate, endDate } = req.query;
 
-  const stats = await getDashboardStats({
-    startDate: startDate ? new Date(startDate as string) : undefined,
-    endDate: endDate ? new Date(endDate as string) : undefined,
-  });
+    const stats = await getDashboardStats({
+      startDate: startDate ? new Date(startDate as string) : undefined,
+      endDate: endDate ? new Date(endDate as string) : undefined,
+    });
 
-  res.status(200).json({
-    status: "success",
-    message: "Dashboard stats fetched",
-    data: stats,
-  });
-});
+    res.status(200).json({
+      status: "success",
+      message: "Dashboard stats fetched",
+      data: stats,
+    });
+  }
+);
+
+export const handlePauseSubscriptionAdmin = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { role } = getUserInfoFromJWT(req);
+    if (role !== "ADMIN") {
+      return res.status(403).json({
+        status: "fail",
+        message: "Only admin can perform this action",
+      });
+    }
+
+    const { subscriptionId, pauseStart, pauseEnd } = req.body;
+
+    const updated = await pauseSubscriptionByAdmin(
+      subscriptionId,
+      pauseStart ? new Date(pauseStart) : undefined,
+      pauseEnd ? new Date(pauseEnd) : undefined
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Subscription paused by admin",
+      data: updated,
+    });
+  }
+);
+
+export const handleCancelSubscriptionAdmin = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { role } = getUserInfoFromJWT(req);
+    if (role !== "ADMIN") {
+      return res.status(403).json({
+        status: "fail",
+        message: "Only admin can perform this action",
+      });
+    }
+
+    const { subscriptionId } = req.body;
+
+    const updated = await cancelSubscriptionByAdmin(subscriptionId);
+
+    res.status(200).json({
+      status: "success",
+      message: "Subscription cancelled by admin",
+      data: updated,
+    });
+  }
+);
 
 export const logoutAdminController = asyncHandler(
   async (req: Request, res: Response) => {

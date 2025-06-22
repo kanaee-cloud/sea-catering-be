@@ -103,9 +103,9 @@ model RefreshToken {
 }
 
 model Testimonial {
-  id            String   @id @default(uuid())
-  customerName  String   @map("customer_name") @db.Char(50)
-  reviewMessage String   @map("review_message") @db.Text
-  rating        Int
-  createdAt     DateTime @default(now())
+  id        String   @id @default(uuid())
+  name      String
+  message   String
+  rating    Int
+  createdAt DateTime @default(now())
 }

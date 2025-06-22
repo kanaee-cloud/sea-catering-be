@@ -6,6 +6,7 @@ import {
   deleteUserSubscription,
   getAllSubscriptions,
   getSubscriptionById,
+  resumeSubscription,
   resumeUserSubscription,
   togglePauseSubscription,
 } from "../services/subscription.service";
@@ -109,7 +110,6 @@ export const handleTogglePauseSubscription = asyncHandler(
 
       res.status(200).json({ status: "success", data: result });
     } catch (error) {
-      console.error("🔥 Error toggle pause:", error);
       res
         .status(500)
         .json({ status: "failed", message: "Internal server error" });
@@ -129,5 +129,27 @@ export const handleCancelSubscription = asyncHandler(
     const userId = getUserIdFromJWT(req);
     const result = await cancelUserSubscription(userId);
     res.status(200).json({ status: "success", data: result });
+  }
+);
+
+export const handleResumeSubscriptionAdmin = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { role } = getUserInfoFromJWT(req);
+    if (role !== "ADMIN") {
+      return res.status(403).json({
+        status: "fail",
+        message: "Only admin can perform this action",
+      });
+    }
+
+    const { subscriptionId } = req.body;
+
+    const updated = await resumeSubscription(subscriptionId);
+
+    res.status(200).json({
+      status: "success",
+      message: "Subscription resumed by admin",
+      data: updated,
+    });
   }
 );

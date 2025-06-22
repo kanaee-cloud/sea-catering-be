@@ -4,7 +4,6 @@ import {
   handleCreateSubscription,
   handleDeleteSubscription,
   handleGetSubscriptionDetail,
-  handleGetSubscriptions,
   handleResumeSubscription,
   handleTogglePauseSubscription,
 } from "../controllers/subscription.controller";
@@ -14,7 +13,6 @@ const router = Router();
 
 router.use(authMiddleware);
 router.post("/", handleCreateSubscription);
-router.get("/", handleGetSubscriptions);
 router.get("/:id", handleGetSubscriptionDetail);
 router.delete("/:id", handleDeleteSubscription);
 router.patch("/resume", handleResumeSubscription);

@@ -42,3 +42,23 @@ export const getUser = async (
 
     return user
 }
+
+export const getAllUsers = async () => {
+  const users = await prisma.users.findMany({
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      role: true,
+    },
+    orderBy: {
+      username: 'desc'
+    }
+  });
+
+  if (!users.length) {
+    throw createError("failed", "No users found", 404);
+  }
+
+  return users;
+};
