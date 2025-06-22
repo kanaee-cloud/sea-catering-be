@@ -10,7 +10,7 @@ import {
   togglePauseSubscription,
 } from "../services/subscription.service";
 import { asyncHandler } from "../exceptions/async_handler.exception";
-import { getUserIdFromJWT } from "../utils/auth.utils";
+import {  getUserIdFromJWT, getUserInfoFromJWT } from "../utils/auth.utils";
 
 export const handleCreateSubscription = asyncHandler(
   async (req: Request, res: Response) => {
@@ -37,10 +37,12 @@ export const handleCreateSubscription = asyncHandler(
 
 export const handleDeleteSubscription = asyncHandler(
   async (req: Request, res: Response) => {
-    const userId = getUserIdFromJWT(req);
+    const { userId, role } = getUserInfoFromJWT(req);
+
+    const targetUserId = role === "admin" ? Number(req.query.userId) || userId : userId;
 
     try {
-      const deletedSubscription = await deleteUserSubscription(userId);
+      const deletedSubscription = await deleteUserSubscription(targetUserId);
       res.status(200).json({
         status: "success",
         message: "Subscription deleted successfully",
@@ -74,7 +76,16 @@ export const handleGetSubscriptionDetail = asyncHandler(
 );
 
 export const handleGetSubscriptions = asyncHandler(
-  async (_req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
+    const { role } = getUserInfoFromJWT(req);
+
+    if (role !== "ADMIN") {
+      return res.status(403).json({
+        status: "fail",
+        message: "Only admin can access all subscriptions",
+      });
+    }
+
     const subscriptions = await getAllSubscriptions();
     res.status(200).json({
       status: "success",

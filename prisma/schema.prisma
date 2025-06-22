@@ -28,6 +28,15 @@ model Users {
   Subscription Subscription[]
 }
 
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  role      Role     @default(ADMIN)
+  username  String
+  password  String
+  createdAt DateTime @default(now())
+}
+
 enum PlanType {
   DIET
   PROTEIN
@@ -71,6 +80,7 @@ model Subscription {
   pauseStart   DateTime?
   pauseEnd     DateTime?
   cancelledAt  DateTime?
+  resumeAt     DateTime?
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 }

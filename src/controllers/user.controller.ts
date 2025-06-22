@@ -51,7 +51,7 @@ export const loginController = asyncHandler(async (req: Request, res: Response) 
         return
     }
 
-    const refreshToken = await createRefreshToken(user.id)
+    const refreshToken = await createRefreshToken(user.id, user.role);
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true, 
@@ -65,7 +65,7 @@ export const loginController = asyncHandler(async (req: Request, res: Response) 
     res.status(200).json({
         status: "success",
         message: "Successfully logged in",
-        token: generateAccessToken(user.id)
+        token: generateAccessToken(user.id, user.role),
     });
     
     return

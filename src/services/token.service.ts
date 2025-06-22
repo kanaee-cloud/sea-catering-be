@@ -5,11 +5,11 @@ import { createError } from "../exceptions/error.exception";
 
 const prisma = new PrismaClient()
 
-export const createRefreshToken = async (userId: number) => {
+export const createRefreshToken = async (userId: number, role: string) => {
      const refreshToken = await prisma.refreshToken.create({
           data: {
                userId: userId,
-               token: generateRefreshToken(userId),
+               token: generateRefreshToken(userId, role),
                expiredAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
           }
      })

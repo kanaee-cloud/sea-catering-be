@@ -140,7 +140,7 @@ export const resumeUserSubscription = async (userId: number) => {
     throw createError("fail", "Subscription not found", 404);
   }
 
-  if (subscription.status !== "PAUSED") {
+  if (subscription.status !== "PAUSED" && subscription.status !== "CANCELLED") {
     throw createError("fail", "Subscription is not paused", 400);
   }
 
@@ -150,6 +150,7 @@ export const resumeUserSubscription = async (userId: number) => {
       status: "ACTIVE",
       pauseStart: null,
       pauseEnd: null,
+      resumeAt: new Date()
     },
   });
 
