@@ -13,7 +13,7 @@ interface JwtPayload {
 
 export const generateAccessToken = (userId: number, role: string) => {
   return jwt.sign({ userId, role }, ACCESS_KEY, {
-    expiresIn: "2h",
+    expiresIn: "7d",
   });
 };
 
