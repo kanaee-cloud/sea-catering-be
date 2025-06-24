@@ -60,7 +60,7 @@ export const loginAdminController = asyncHandler(
       httpOnly: true,
       secure: true,
       sameSite: "strict",
-      path: "/api/v1",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 

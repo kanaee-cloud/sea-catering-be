@@ -11,7 +11,12 @@ const app: Express = express();
 const cors = require("cors")
 const port = process.env.PORT || 3000;
 
-app.use(cors())
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
 app.use(cookieParser())
 app.use(express.json());
 app.use("/api/v1/", v1Route);

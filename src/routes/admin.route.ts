@@ -4,7 +4,7 @@ import { getAdminController, handleCancelSubscriptionAdmin, handlePauseSubscript
 import { getAdminDashboard } from "../controllers/admin.controller";
 import { getAllUsersController } from "../controllers/admin.controller";
 import { handleGetSubscriptions, handleResumeSubscription } from "../controllers/subscription.controller";
-import { handleCreateMealplan, handleGetMealplanDetail, handleGetMealplans } from "../controllers/mealplan.controller";
+import { handleCreateMealplan } from "../controllers/mealplan.controller";
 
 const router = Router();
 
@@ -17,8 +17,7 @@ router.patch("/subscription/pause", handlePauseSubscriptionAdmin);
 router.patch("/subscription/cancel", handleCancelSubscriptionAdmin);
 router.patch("/subscription/resume", handleResumeSubscription);
 router.post('/mealplan', handleCreateMealplan);   
-router.get('/mealplan', handleGetMealplans); 
-router.get('/mealplan/:id', handleGetMealplanDetail);    
+
 
 
 
