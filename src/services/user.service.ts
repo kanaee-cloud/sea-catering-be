@@ -56,9 +56,23 @@ export const getAllUsers = async () => {
     }
   });
 
+    const usersWithSubs = await Promise.all(
+    users.map(async (user) => {
+      const subscription = await prisma.subscription.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      return {
+        ...user,
+        subscription,
+      };
+    })
+  );
+
   if (!users.length) {
     throw createError("failed", "No users found", 404);
   }
 
-  return users;
+  return usersWithSubs;
 };
