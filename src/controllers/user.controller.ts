@@ -54,13 +54,14 @@ export const loginController = asyncHandler(
 
     const refreshToken = await createRefreshToken(user.id, user.role);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true, 
+        secure: false,
+        sameSite: 'lax',
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    }
+)
 
     res.status(200).json({
       status: "success",
@@ -118,5 +119,5 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
     message: "Successfully Logged out",
   });
 
-  return;
-});
+    return
+})
