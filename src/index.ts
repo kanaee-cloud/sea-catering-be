@@ -31,6 +31,7 @@ app.use(errorHandler)
 // app.listen(port, () => {
 //   console.log(`Server is running on http://localhost:${port}`);
 // });
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
+// Trigger redeploy
 
 export default app;
