@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(cors({
  origin: [
     "http://localhost:5173", 
-    "https://sea-catering-fe.vercel.app" // error mulu jadi coba gini aja cors nya
+    "https://seacatering-fe.vercel.app" // error mulu jadi coba gini aja cors nya
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
