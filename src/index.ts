@@ -12,7 +12,10 @@ const cors = require("cors")
 const port = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+ origin: [
+    "http://localhost:5173", 
+    "https://sea-catering-fe.vercel.app" // error mulu jadi coba gini aja cors nya
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
