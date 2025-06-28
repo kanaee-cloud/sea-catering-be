@@ -23,10 +23,14 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.json());
 app.use("/api/v1/", v1Route);
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
 app.use(errorHandler)
 
 // app.listen(port, () => {
 //   console.log(`Server is running on http://localhost:${port}`);
 // });
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
 export default app;
