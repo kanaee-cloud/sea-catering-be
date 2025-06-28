@@ -32,6 +32,7 @@ model Admin {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   role      Role     @default(ADMIN)
+  RefreshToken RefreshToken[]
   username  String
   password  String
   createdAt DateTime @default(now())
@@ -96,8 +97,10 @@ model Mealplan {
 model RefreshToken {
   id        String   @id @default(uuid())
   token     String   @unique
-  userId    Int
-  user      Users    @relation(fields: [userId], references: [id])
+  userId    Int?
+  user      Users?    @relation(fields: [userId], references: [id])
+   adminId   Int?
+  admin     Admin?   @relation(fields: [adminId], references: [id])
   createdAt DateTime @default(now())
   expiredAt DateTime
 }
