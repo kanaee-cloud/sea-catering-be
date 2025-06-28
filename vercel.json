@@ -2,20 +2,17 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.ts",
+      "src": "dist/api/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": [
-          "prisma/schema.prisma",
-          "dist/**"
-        ]
+        "includeFiles": ["dist/**", "prisma/**"]
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/index.ts"
+      "dest": "dist/api/index.js"
     }
   ]
 }
