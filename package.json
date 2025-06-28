@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npx prisma generate && tsc && copy prisma\\schema.prisma dist\\prisma",
+    "build": "npx prisma generate && tsc && shx cp prisma\\schema.prisma dist\\prisma",
     "vercel-build": "npm run build",
     "clean": "powershell -Command \"Remove-Item -Recurse -Force .vercel, node_modules, dist -ErrorAction SilentlyContinue\"",
     "start": "node api/index.js",
@@ -34,6 +34,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.3",
     "prisma": "^6.10.1",
+    "shx": "^0.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
