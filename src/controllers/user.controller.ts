@@ -54,12 +54,12 @@ export const loginController = asyncHandler(async (req: Request, res: Response) 
     const refreshToken = await createRefreshToken(user.id, user.role);
 
     res.cookie('refreshToken', refreshToken, {
-        httpOnly: true, 
-        secure: false,
-        sameSite: 'lax',
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60 * 1000
-    }
+          httpOnly: true,
+          secure: true,              
+          sameSite: 'None',          
+          path: "/",
+          maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 )
 
     res.status(200).json({
