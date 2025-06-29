@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 import v1Route from "./routes/v1.route"
 import cookieParser from "cookie-parser";
-import {errorHandler} from "./exceptions/error_handler.exception";
+import { errorHandler } from "./exceptions/error_handler.exception";
 
 
 dotenv.config();
