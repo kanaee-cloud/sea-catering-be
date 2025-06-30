@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../exceptions/async_handler.exception";
-import { createTestimonial, getTestimonials } from "../services/testimonial.service";
+import { createTestimonial, deleteTestimonial, getTestimonials } from "../services/testimonial.service";
 import { createTestimonialSchema } from "../dtos/testimonial.dtos";
 
 export const handleCreateTestimonial = asyncHandler(
@@ -21,6 +21,19 @@ export const handleCreateTestimonial = asyncHandler(
       status: "success",
       message: "Testimonial submitted",
       data: testimonial,
+    });
+  }
+);
+
+export const handleDeleteTestimonial = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    await deleteTestimonial(id);
+
+    res.status(200).json({
+      status: "success",
+      message: "Testimonial deleted",
     });
   }
 );

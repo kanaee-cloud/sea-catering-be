@@ -22,3 +22,14 @@ export const getTestimonials = async () => {
     orderBy: { createdAt: "desc" },
   });
 };
+
+export const deleteTestimonial = async (id: string) => {
+  try {
+    await prisma.testimonial.delete({
+      where: { id },
+    });
+  } catch (error) {
+    throw createError("fail", "Failed to delete testimonial", 500);
+  }
+};
+

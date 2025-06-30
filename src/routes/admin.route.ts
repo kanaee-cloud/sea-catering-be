@@ -5,6 +5,7 @@ import { getAdminDashboard } from "../controllers/admin.controller";
 import { getAllUsersController } from "../controllers/admin.controller";
 import { handleGetSubscriptions, handleResumeSubscriptionAdmin } from "../controllers/subscription.controller";
 import { handleCreateMealplan } from "../controllers/mealplan.controller";
+import { handleDeleteTestimonial, handleGetTestimonials } from "../controllers/testimonial.controller";
 
 const router = Router();
 
@@ -13,6 +14,8 @@ router.get("/me", getAdminController);
 router.get("/dashboard", getAdminDashboard);
 router.get("/user/list", getAllUsersController)
 router.get("/subscription/list", handleGetSubscriptions);
+router.get("/testimonial", handleGetTestimonials);
+router.delete("/testimonial/:id", handleDeleteTestimonial);
 router.patch("/subscription/pause", handlePauseSubscriptionAdmin);
 router.patch("/subscription/cancel", handleCancelSubscriptionAdmin);
 router.patch("/subscription/resume", handleResumeSubscriptionAdmin);

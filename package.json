@@ -7,7 +7,8 @@
    "clean": "powershell -Command \"Remove-Item -Recurse -Force .vercel, node_modules, dist, package-lock.json\"",
     "build": "npx prisma generate && tsc && npx shx mkdir -p dist/prisma && npx shx cp prisma/schema.prisma dist/prisma/",
     "vercel-build": "npm run build",
-    "start": "node api/index.js"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.ts"
   },
   "author": "",
   "license": "ISC",
